@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>HIPS Dashboard</title>
+</head>
+<body>
+    <h1>HIPS Dashboard</h1>
+
+    <p>
+        <a href="/config">Configuración de módulos</a> |
+        <a href="/logout">Cerrar sesión</a>
+    </p>
+
+    <h2>Alarmas detectadas</h2>
+    <table border="1" cellpadding="5">
+        <tr>
+            <th>Registro</th>
+        </tr>
+        {% for alarma in alarmas %}
+        <tr>
+            <td>{{ alarma }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Acciones de prevención</h2>
+    <table border="1" cellpadding="5">
+        <tr>
+            <th>Registro</th>
+        </tr>
+        {% for prevencion in prevenciones %}
+        <tr>
+            <td>{{ prevencion }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Emails generados</h2>
+    <table border="1" cellpadding="5">
+        <tr>
+            <th>Registro</th>
+        </tr>
+        {% for email in emails %}
+        <tr>
+            <td>{{ email }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

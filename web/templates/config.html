@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Configuración HIPS</title>
+</head>
+<body>
+    <h1>Configuración de módulos</h1>
+
+    <p>
+        <a href="/dashboard">Volver al dashboard</a> |
+        <a href="/logout">Cerrar sesión</a>
+    </p>
+
+    <table border="1" cellpadding="5">
+        <tr>
+            <th>Módulo</th>
+            <th>Estado</th>
+        </tr>
+        {% for module in modules %}
+        <tr>
+            <td>{{ module }}</td>
+            <td>Configurable</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
