@@ -1,0 +1,133 @@
+===== HARDENING ROCKY LINUX - EVIDENCIA =====
+
+Fecha:
+vie 26 jun 2026 13:17:37 -03
+
+1. Sistema operativo:
+NAME="Rocky Linux"
+VERSION="9.8 (Blue Onyx)"
+RELEASE_TYPE="stable"
+ID="rocky"
+ID_LIKE="rhel centos fedora"
+VERSION_ID="9.8"
+PLATFORM_ID="platform:el9"
+PRETTY_NAME="Rocky Linux 9.8 (Blue Onyx)"
+ANSI_COLOR="0;32"
+LOGO="fedora-logo-icon"
+CPE_NAME="cpe:/o:rocky:rocky:9::baseos"
+HOME_URL="https://rockylinux.org/"
+VENDOR_NAME="RESF"
+VENDOR_URL="https://resf.org/"
+BUG_REPORT_URL="https://bugs.rockylinux.org/"
+SUPPORT_END="2032-05-31"
+ROCKY_SUPPORT_PRODUCT="Rocky-Linux-9"
+ROCKY_SUPPORT_PRODUCT_VERSION="9.8"
+REDHAT_SUPPORT_PRODUCT="Rocky Linux"
+REDHAT_SUPPORT_PRODUCT_VERSION="9.8"
+
+2. SELinux:
+Enforcing
+
+3. Firewalld:
+enabled
+active
+public (active)
+  target: default
+  icmp-block-inversion: no
+  interfaces: enp0s3 enp0s8
+  sources: 
+  services: dhcpv6-client ssh
+  ports: 5000/tcp
+  protocols: 
+  forward: yes
+  masquerade: no
+  forward-ports: 
+  source-ports: 
+  icmp-blocks: 
+  rich rules: 
+
+4. SSH - root login:
+/etc/ssh/sshd_config.d/10-hips-hardening.conf:PermitRootLogin no
+
+5. Auditd:
+enabled
+active
+
+6. Chronyd:
+enabled
+active
+Reference ID    : A29FC87B (time.cloudflare.com)
+Stratum         : 4
+Ref time (UTC)  : Fri Jun 26 16:12:28 2026
+System time     : 0.000841130 seconds slow of NTP time
+Last offset     : -0.000072106 seconds
+RMS offset      : 0.000290140 seconds
+Frequency       : 1.288 ppm fast
+Residual freq   : -0.002 ppm
+Skew            : 0.042 ppm
+Root delay      : 0.164231777 seconds
+Root dispersion : 0.003039456 seconds
+Update interval : 1029.8 seconds
+Leap status     : Normal
+
+7. Rsyslog:
+enabled
+active
+
+8. Permisos archivos sensibles:
+-rw-r--r--. 1 root root  495 jun  8 09:20 /etc/group
+----------. 1 root root  388 jun  8 09:20 /etc/gshadow
+-rw-r--r--. 1 root root 1005 jun  8 09:20 /etc/passwd
+----------. 1 root root  731 jun  8 09:20 /etc/shadow
+
+9. Usuarios con UID 0:
+root:x:0:0:root:/root:/bin/bash
+
+10. Puertos en escucha:
+Netid State  Recv-Q Send-Q Local Address:Port Peer Address:PortProcess                                                                                                   
+udp   UNCONN 0      0          127.0.0.1:323       0.0.0.0:*    users:(("chronyd",pid=736,fd=5))    ino:21063 sk:1 cgroup:/system.slice/chronyd.service <->              
+udp   UNCONN 0      0              [::1]:323          [::]:*    users:(("chronyd",pid=736,fd=6))    ino:21064 sk:2 cgroup:/system.slice/chronyd.service v6only:1 <->     
+tcp   LISTEN 0      244        127.0.0.1:5432      0.0.0.0:*    users:(("postmaster",pid=801,fd=7)) uid:26 ino:22587 sk:3 cgroup:/system.slice/postgresql.service <->    
+tcp   LISTEN 0      128          0.0.0.0:5000      0.0.0.0:*    users:(("python",pid=9176,fd=3))    ino:53657 sk:4 cgroup:/user.slice/user-1000.slice/session-3.scope <->
+tcp   LISTEN 0      128          0.0.0.0:22        0.0.0.0:*    users:(("sshd",pid=797,fd=7))       ino:22491 sk:5 cgroup:/system.slice/sshd.service <->                 
+tcp   LISTEN 0      128             [::]:22           [::]:*    users:(("sshd",pid=797,fd=8))       ino:22500 sk:6 cgroup:/system.slice/sshd.service v6only:1 <->        
+tcp   LISTEN 0      244            [::1]:5432         [::]:*    users:(("postmaster",pid=801,fd=6)) uid:26 ino:22585 sk:7 cgroup:/system.slice/postgresql.service v6only:1 <->
+
+11. Actualizaciones disponibles:
+Última comprobación de caducidad de metadatos hecha hace 2:39:58, el vie 26 jun 2026 10:37:41.
+
+NetworkManager.x86_64                 1:1.54.3-3.el9_8                    baseos
+NetworkManager-libnm.x86_64           1:1.54.3-3.el9_8                    baseos
+NetworkManager-team.x86_64            1:1.54.3-3.el9_8                    baseos
+NetworkManager-tui.x86_64             1:1.54.3-3.el9_8                    baseos
+coreutils.x86_64                      8.32-41.el9_8                       baseos
+coreutils-common.x86_64               8.32-41.el9_8                       baseos
+dracut.x86_64                         057-115.git20260527.el9_8           baseos
+dracut-config-rescue.x86_64           057-115.git20260527.el9_8           baseos
+dracut-network.x86_64                 057-115.git20260527.el9_8           baseos
+dracut-squash.x86_64                  057-115.git20260527.el9_8           baseos
+iwl100-firmware.noarch                39.31.5.1-161.el9_8                 baseos
+iwl1000-firmware.noarch               1:39.31.5.1-161.el9_8               baseos
+iwl105-firmware.noarch                18.168.6.1-161.el9_8                baseos
+iwl135-firmware.noarch                18.168.6.1-161.el9_8                baseos
+iwl2000-firmware.noarch               18.168.6.1-161.el9_8                baseos
+iwl2030-firmware.noarch               18.168.6.1-161.el9_8                baseos
+iwl3160-firmware.noarch               1:25.30.13.0-161.el9_8              baseos
+iwl5000-firmware.noarch               8.83.5.1_1-161.el9_8                baseos
+iwl5150-firmware.noarch               8.24.2.2-161.el9_8                  baseos
+iwl6000g2a-firmware.noarch            18.168.6.1-161.el9_8                baseos
+iwl6050-firmware.noarch               41.28.5.1-161.el9_8                 baseos
+iwl7260-firmware.noarch               1:25.30.13.0-161.el9_8              baseos
+kernel.x86_64                         5.14.0-687.17.1.el9_8               baseos
+kernel-core.x86_64                    5.14.0-687.17.1.el9_8               baseos
+kernel-modules.x86_64                 5.14.0-687.17.1.el9_8               baseos
+kernel-modules-core.x86_64            5.14.0-687.17.1.el9_8               baseos
+kernel-tools.x86_64                   5.14.0-687.17.1.el9_8               baseos
+kernel-tools-libs.x86_64              5.14.0-687.17.1.el9_8               baseos
+
+12. Estado PostgreSQL:
+enabled
+active
+  postgresql.service                 loaded active running PostgreSQL database server
+
+===== FIN DE EVIDENCIA =====
