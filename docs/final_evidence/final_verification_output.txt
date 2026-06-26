@@ -1,0 +1,144 @@
+===== VERIFICACION FINAL HIPS =====
+Fecha: vie 26 jun 2026 13:30:28 -03
+
+===== 1. ESTADO GIT =====
+En la rama main
+Tu rama está actualizada con 'origin/main'.
+
+Archivos sin seguimiento:
+  (usa "git add <archivo>..." para incluirlo a lo que será confirmado)
+	docs/final_evidence/
+
+no hay nada agregado al commit pero hay archivos sin seguimiento presentes (usa "git add" para hacerles seguimiento)
+
+===== 2. ULTIMOS COMMITS =====
+95a9286 Add final delivery checklist
+f7db926 Add project README and user manual
+323ab8b Add final HIPS test evidence
+b164168 Document Rocky Linux hardening controls
+a4846db Document PostgreSQL CIS hardening controls
+674c4b5 Connect dashboard to PostgreSQL
+e0a1bc3 Integrate HIPS logging with PostgreSQL
+9a8745c Implement mail queue monitoring module
+c7a619e Implement DNS DDoS detection module
+611d1ef Implement cron monitoring module
+
+===== 3. VERIFICAR QUE .env NO ESTE VERSIONADO =====
+OK: .env no esta versionado
+
+===== 4. ARCHIVOS PRINCIPALES =====
+-rw-r--r--. 1 hector hector  265 jun 26 13:27 .env.example
+-rw-r--r--. 1 hector hector   64 jun  8 09:43 .gitignore
+-rw-r--r--. 1 hector hector 3113 jun 26 13:27 README.md
+
+===== 5. DOCUMENTACION =====
+-rw-r-----. 1 hector hector 2173 jun 26 13:16 docs/postgresql_cis_hardening.md
+-rw-r-----. 1 hector hector 2594 jun 26 13:21 docs/rocky_hardening.md
+-rw-r-----. 1 hector hector 1516 jun 26 13:27 docs/manual_usuario.md
+-rw-r-----. 1 hector hector 3852 jun 26 13:29 docs/checklist_final_entrega.md
+-rw-r-----. 1 hector hector 1701 jun 26 13:26 docs/test_evidence/phase12_test_summary.md
+-rw-r-----. 1 hector hector 28462 jun 26 13:24 docs/test_evidence/phase12_full_test_output.txt
+
+===== 6. SINTAXIS PYTHON =====
+OK: sintaxis Python correcta
+
+===== 7. SERVICIO POSTGRESQL =====
+enabled
+active
+
+===== 8. TABLAS POSTGRESQL =====
+could not change directory to "/home/hector/hips-project": Permiso denegado
+                 List of relations
+ Schema |         Name          | Type  |  Owner   
+--------+-----------------------+-------+----------
+ public | acciones_prevencion   | table | postgres
+ public | alarmas               | table | postgres
+ public | baseline_archivos     | table | postgres
+ public | configuracion_modulos | table | postgres
+ public | eventos_sistema       | table | postgres
+ public | usuarios_web          | table | postgres
+(6 rows)
+
+
+===== 9. ULTIMAS ALARMAS EN POSTGRESQL =====
+could not change directory to "/home/hector/hips-project": Permiso denegado
+ id |         timestamp          |          tipo_alarma          |  ip_origen  | modulo 
+----+----------------------------+-------------------------------+-------------+--------
+ 26 | 2026-06-26 13:24:21.477162 | MAIL_QUEUE_USUARIO_SOSPECHOSO | N/A         | hips
+ 25 | 2026-06-26 13:24:21.438955 | MAIL_QUEUE_ALTA               | N/A         | hips
+ 24 | 2026-06-26 13:24:21.266562 | DDOS_DNS_DISTRIBUIDO          | N/A         | hips
+ 23 | 2026-06-26 13:24:21.22705  | DDOS_DNS_ANY_FLOOD            | 10.10.10.90 | hips
+ 22 | 2026-06-26 13:24:21.188087 | DDOS_DNS_IP_ALTA_FRECUENCIA   | 10.10.10.90 | hips
+ 21 | 2026-06-26 13:24:21.150016 | DDOS_DNS_IP_ALTA_FRECUENCIA   | 10.10.10.80 | hips
+ 20 | 2026-06-26 13:24:20.976576 | CRON_TAREA_SOSPECHOSA         | N/A         | hips
+ 19 | 2026-06-26 13:24:20.939409 | CRON_ARCHIVO_SOSPECHOSO       | N/A         | hips
+ 18 | 2026-06-26 13:24:20.722755 | PROCESO_TMP_SOSPECHOSO        | N/A         | hips
+ 17 | 2026-06-26 13:24:20.683973 | ARCHIVO_TMP_SOSPECHOSO        | N/A         | hips
+(10 rows)
+
+
+===== 10. ULTIMAS PREVENCIONES EN POSTGRESQL =====
+could not change directory to "/home/hector/hips-project": Permiso denegado
+ id |         timestamp          |          tipo_alarma          |  ip_origen  |      accion       |                                    resultado                                    
+----+----------------------------+-------------------------------+-------------+-------------------+---------------------------------------------------------------------------------
+ 26 | 2026-06-26 13:24:21.498686 | MAIL_QUEUE_USUARIO_SOSPECHOSO | N/A         | lock_user         | Usuario no existe en el sistema: spamuser
+ 25 | 2026-06-26 13:24:21.457544 | MAIL_QUEUE_ALTA               | N/A         | stop_service      | DRY RUN: se detendria el servicio postfix
+ 24 | 2026-06-26 13:24:21.285731 | DDOS_DNS_DISTRIBUIDO          | N/A         | stop_service      | DRY RUN: se detendria el servicio named
+ 23 | 2026-06-26 13:24:21.248081 | DDOS_DNS_ANY_FLOOD            | 10.10.10.90 | block_ip          | DRY RUN: se bloquearia la IP 10.10.10.90
+ 22 | 2026-06-26 13:24:21.207401 | DDOS_DNS_IP_ALTA_FRECUENCIA   | 10.10.10.90 | block_ip          | DRY RUN: se bloquearia la IP 10.10.10.90
+ 21 | 2026-06-26 13:24:21.169208 | DDOS_DNS_IP_ALTA_FRECUENCIA   | 10.10.10.80 | block_ip          | DRY RUN: se bloquearia la IP 10.10.10.80
+ 20 | 2026-06-26 13:24:20.996187 | CRON_TAREA_SOSPECHOSA         | N/A         | disable_cron_file | DRY RUN: se moveria cron sospechoso a cuarentena: /tmp/cron_phase12/payload_job
+ 19 | 2026-06-26 13:24:20.958348 | CRON_ARCHIVO_SOSPECHOSO       | N/A         | disable_cron_file | DRY RUN: se moveria cron sospechoso a cuarentena: /tmp/cron_phase12/payload_job
+ 18 | 2026-06-26 13:24:20.769817 | PROCESO_TMP_SOSPECHOSO        | N/A         | quarantine_file   | DRY RUN: se moveria a cuarentena /tmp/hips_tmp_phase12/.xpayload123.sh
+ 17 | 2026-06-26 13:24:20.748172 | PROCESO_TMP_SOSPECHOSO        | N/A         | terminate_process | DRY RUN: se terminaria proceso suspicious PID 4444
+(10 rows)
+
+
+===== 11. LOGS DEL HIPS =====
+total 52
+-rw-r-----. 1 hector hector  5731 jun 26 13:24 alarmas.log
+drwxr-x---. 2 hector hector   113 jun 25 23:02 backup
+-rw-r-----. 1 hector hector 32916 jun 26 13:24 emails.log
+-rw-r-----. 1 hector hector  7164 jun 26 13:24 prevencion.log
+
+===== 12. ULTIMAS ALARMAS EN LOG =====
+26/06/2026 13:24:20 :: ARCHIVO_TMP_SOSPECHOSO :: N/A
+26/06/2026 13:24:20 :: PROCESO_TMP_SOSPECHOSO :: N/A
+26/06/2026 13:24:20 :: CRON_ARCHIVO_SOSPECHOSO :: N/A
+26/06/2026 13:24:20 :: CRON_TAREA_SOSPECHOSA :: N/A
+26/06/2026 13:24:21 :: DDOS_DNS_IP_ALTA_FRECUENCIA :: 10.10.10.80
+26/06/2026 13:24:21 :: DDOS_DNS_IP_ALTA_FRECUENCIA :: 10.10.10.90
+26/06/2026 13:24:21 :: DDOS_DNS_ANY_FLOOD :: 10.10.10.90
+26/06/2026 13:24:21 :: DDOS_DNS_DISTRIBUIDO :: N/A
+26/06/2026 13:24:21 :: MAIL_QUEUE_ALTA :: N/A
+26/06/2026 13:24:21 :: MAIL_QUEUE_USUARIO_SOSPECHOSO :: N/A
+
+===== 13. ULTIMAS PREVENCIONES EN LOG =====
+26/06/2026 13:24:20 :: PROCESO_TMP_SOSPECHOSO :: N/A :: terminate_process :: DRY RUN: se terminaria proceso suspicious PID 4444
+26/06/2026 13:24:20 :: PROCESO_TMP_SOSPECHOSO :: N/A :: quarantine_file :: DRY RUN: se moveria a cuarentena /tmp/hips_tmp_phase12/.xpayload123.sh
+26/06/2026 13:24:20 :: CRON_ARCHIVO_SOSPECHOSO :: N/A :: disable_cron_file :: DRY RUN: se moveria cron sospechoso a cuarentena: /tmp/cron_phase12/payload_job
+26/06/2026 13:24:20 :: CRON_TAREA_SOSPECHOSA :: N/A :: disable_cron_file :: DRY RUN: se moveria cron sospechoso a cuarentena: /tmp/cron_phase12/payload_job
+26/06/2026 13:24:21 :: DDOS_DNS_IP_ALTA_FRECUENCIA :: 10.10.10.80 :: block_ip :: DRY RUN: se bloquearia la IP 10.10.10.80
+26/06/2026 13:24:21 :: DDOS_DNS_IP_ALTA_FRECUENCIA :: 10.10.10.90 :: block_ip :: DRY RUN: se bloquearia la IP 10.10.10.90
+26/06/2026 13:24:21 :: DDOS_DNS_ANY_FLOOD :: 10.10.10.90 :: block_ip :: DRY RUN: se bloquearia la IP 10.10.10.90
+26/06/2026 13:24:21 :: DDOS_DNS_DISTRIBUIDO :: N/A :: stop_service :: DRY RUN: se detendria el servicio named
+26/06/2026 13:24:21 :: MAIL_QUEUE_ALTA :: N/A :: stop_service :: DRY RUN: se detendria el servicio postfix
+26/06/2026 13:24:21 :: MAIL_QUEUE_USUARIO_SOSPECHOSO :: N/A :: lock_user :: Usuario no existe en el sistema: spamuser
+
+===== 14. ULTIMOS EMAILS GENERADOS =====
+Detalle: 10 eventos DNS totales en 60 segundos. Posible DDoS distribuido.
+26/06/2026 13:24:21 :: TO=admin@example.com :: SUBJECT=[HIPS PREVENCION] DDOS_DNS_DISTRIBUIDO :: BODY=DRY RUN: se detendria el servicio named
+26/06/2026 13:24:21 :: TO=admin@example.com :: SUBJECT=[HIPS ALERTA] MAIL_QUEUE_ALTA :: BODY=Modulo: mail_queue
+IP: N/A
+Detalle: Cola de correo elevada: 7 mensajes pendientes
+26/06/2026 13:24:21 :: TO=admin@example.com :: SUBJECT=[HIPS PREVENCION] MAIL_QUEUE_ALTA :: BODY=DRY RUN: se detendria el servicio postfix
+26/06/2026 13:24:21 :: TO=admin@example.com :: SUBJECT=[HIPS ALERTA] MAIL_QUEUE_USUARIO_SOSPECHOSO :: BODY=Modulo: mail_queue
+IP: N/A
+Detalle: Cuenta con muchos mensajes en cola: spamuser@example.com (5 mensajes)
+26/06/2026 13:24:21 :: TO=admin@example.com :: SUBJECT=[HIPS PREVENCION] MAIL_QUEUE_USUARIO_SOSPECHOSO :: BODY=Usuario no existe en el sistema: spamuser
+
+===== 15. DASHBOARD =====
+Dashboard Flask disponible ejecutando: python web/app.py
+URL esperada: http://IP_DEL_SERVIDOR:5000
+
+===== FIN VERIFICACION FINAL =====
