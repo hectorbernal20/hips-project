@@ -4,11 +4,16 @@ import argparse
 import re
 
 from alerts.logger import log_alarm
+from alerts.mailer import send_admin_email
 from prevention.firewall import block_ip
 
 
 FAILED_LOGIN_REGEX = re.compile(
     r"^(?P<month>\w{3})\s+(?P<day>\d{1,2})\s+(?P<time>\d{2}:\d{2}:\d{2}).*Failed password.* from (?P<ip>\d+\.\d+\.\d+\.\d+)"
+)
+
+AUTH_FAILURE_REGEX = re.compile(
+    r"^(?P<month>\w{3})\s+(?P<day>\d{1,2})\s+(?P<time>\d{2}:\d{2}:\d{2}).*authentication failure.*rhost=(?P<ip>\d+\.\d+\.\d+\.\d+)"
 )
 
 MONTHS = {
@@ -29,7 +34,7 @@ def read_failed_logins(log_path):
 
     with open(log_path, "r", encoding="utf-8", errors="ignore") as file:
         for line in file:
-            match = FAILED_LOGIN_REGEX.search(line)
+            match = FAILED_LOGIN_REGEX.search(line) or AUTH_FAILURE_REGEX.search(line)
             if not match:
                 continue
 
@@ -78,36 +83,32 @@ def detect_failed_logins(log_path, threshold=5, window_minutes=10, whitelist=Non
 
 def main():
     parser = argparse.ArgumentParser(description="Detector de intentos de acceso invalidos")
-    parser.add_argument("--log", default="/var/log/secure", help="Ruta del archivo de log")
-    parser.add_argument("--threshold", type=int, default=5, help="Cantidad maxima permitida")
-    parser.add_argument("--window", type=int, default=10, help="Ventana de tiempo en minutos")
-    parser.add_argument("--prevent", action="store_true", help="Ejecuta accion de prevencion")
-    parser.add_argument("--real-block", action="store_true", help="Bloquea realmente la IP con firewall")
+    parser.add_argument("--log", default="/var/log/secure")
+    parser.add_argument("--threshold", type=int, default=5)
+    parser.add_argument("--window", type=int, default=10)
+    parser.add_argument("--prevent", action="store_true")
+    parser.add_argument("--real-block", action="store_true")
     args = parser.parse_args()
 
     alarms = detect_failed_logins(args.log, args.threshold, args.window)
 
     for alarm in alarms:
-        accion_tomada = "registrar_alerta"
+        log_alarm(alarm["tipo_alarma"], alarm["ip_origen"])
 
-        if args.prevent:
-            prevention_result = block_ip(
-                alarm["ip_origen"],
-                reason=alarm["tipo_alarma"],
-                dry_run=not args.real_block
-            )
-            accion_tomada = prevention_result["reason"]
-
-        log_alarm(
-            alarm["tipo_alarma"],
-            alarm["ip_origen"],
-            alarm["modulo"],
-            alarm["descripcion"],
-            accion_tomada=accion_tomada
+        send_admin_email(
+            f"[HIPS ALERTA] {alarm['tipo_alarma']}",
+            f"Modulo: {alarm['modulo']}\nIP: {alarm['ip_origen']}\nDetalle: {alarm['descripcion']}"
         )
 
+        if args.prevent:
+            result = block_ip(
+                alarm["ip_origen"],
+                tipo_alarma=alarm["tipo_alarma"],
+                dry_run=not args.real_block
+            )
+            print(f"Prevencion: {result}")
+
         print(alarm)
-        print(f"Accion preventiva: {accion_tomada}")
 
     if not alarms:
         print("No se detectaron accesos invalidos repetidos.")
