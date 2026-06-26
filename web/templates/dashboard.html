@@ -13,30 +13,68 @@
     </p>
 
     <h2>Alarmas detectadas</h2>
+    <p>Origen de datos: {{ alarmas_source }}</p>
+
     <table border="1" cellpadding="5">
         <tr>
-            <th>Registro</th>
+            <th>ID</th>
+            <th>Fecha</th>
+            <th>Tipo de alarma</th>
+            <th>IP origen</th>
+            <th>Módulo</th>
+            <th>Descripción</th>
+            <th>Resuelta</th>
         </tr>
+
         {% for alarma in alarmas %}
         <tr>
-            <td>{{ alarma }}</td>
+            {% if alarma.registro %}
+                <td colspan="7">{{ alarma.registro }}</td>
+            {% else %}
+                <td>{{ alarma.id }}</td>
+                <td>{{ alarma.timestamp }}</td>
+                <td>{{ alarma.tipo_alarma }}</td>
+                <td>{{ alarma.ip_origen }}</td>
+                <td>{{ alarma.modulo }}</td>
+                <td>{{ alarma.descripcion }}</td>
+                <td>{{ alarma.resuelta }}</td>
+            {% endif %}
         </tr>
         {% endfor %}
     </table>
 
     <h2>Acciones de prevención</h2>
+    <p>Origen de datos: {{ prevenciones_source }}</p>
+
     <table border="1" cellpadding="5">
         <tr>
-            <th>Registro</th>
+            <th>ID</th>
+            <th>Fecha</th>
+            <th>Tipo de alarma</th>
+            <th>IP origen</th>
+            <th>Acción</th>
+            <th>Resultado</th>
         </tr>
+
         {% for prevencion in prevenciones %}
         <tr>
-            <td>{{ prevencion }}</td>
+            {% if prevencion.registro %}
+                <td colspan="6">{{ prevencion.registro }}</td>
+            {% else %}
+                <td>{{ prevencion.id }}</td>
+                <td>{{ prevencion.timestamp }}</td>
+                <td>{{ prevencion.tipo_alarma }}</td>
+                <td>{{ prevencion.ip_origen }}</td>
+                <td>{{ prevencion.accion }}</td>
+                <td>{{ prevencion.resultado }}</td>
+            {% endif %}
         </tr>
         {% endfor %}
     </table>
 
     <h2>Emails generados</h2>
+    <p>Origen de datos: Archivo de log</p>
+
     <table border="1" cellpadding="5">
         <tr>
             <th>Registro</th>

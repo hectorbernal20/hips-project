@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+import sys
 
 from dotenv import load_dotenv
 from flask import Flask, redirect, render_template, request, url_for, flash
@@ -7,7 +8,10 @@ from flask_login import LoginManager, UserMixin, login_required, login_user, log
 from werkzeug.security import check_password_hash, generate_password_hash
 
 
-load_dotenv()
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(PROJECT_ROOT))
+
+load_dotenv(PROJECT_ROOT / ".env")
 
 app = Flask(__name__)
 app.secret_key = os.getenv("HIPS_SECRET_KEY", "change_me")
@@ -38,6 +42,93 @@ def read_log_file(filename, limit=50):
     return list(reversed(lines[-limit:]))
 
 
+def db_fetch_all(query, params=None):
+    if os.getenv("HIPS_DB_ENABLED", "false").lower() != "true":
+        return None
+
+    connection = None
+
+    try:
+        from db.connection import get_connection
+
+        connection = get_connection()
+
+        if connection is None:
+            return None
+
+        with connection:
+            with connection.cursor() as cursor:
+                cursor.execute(query, params or ())
+                columns = [column[0] for column in cursor.description]
+                return [
+                    dict(zip(columns, row))
+                    for row in cursor.fetchall()
+                ]
+
+    except Exception as error:
+        print(f"[HIPS WEB DB WARNING] {error}", file=sys.stderr)
+        return None
+
+    finally:
+        if connection is not None:
+            connection.close()
+
+
+def get_alarmas(limit=50):
+    query = """
+        SELECT
+            id,
+            timestamp,
+            tipo_alarma,
+            COALESCE(ip_origen, 'N/A') AS ip_origen,
+            modulo,
+            descripcion,
+            resuelta
+        FROM alarmas
+        ORDER BY timestamp DESC, id DESC
+        LIMIT %s
+    """
+
+    rows = db_fetch_all(query, (limit,))
+
+    if rows is not None:
+        return rows, "PostgreSQL"
+
+    fallback_rows = [
+        {"registro": line}
+        for line in read_log_file("alarmas.log", limit)
+    ]
+
+    return fallback_rows, "Archivo de log"
+
+
+def get_prevenciones(limit=50):
+    query = """
+        SELECT
+            id,
+            timestamp,
+            COALESCE(tipo_alarma, 'N/A') AS tipo_alarma,
+            COALESCE(ip_origen, 'N/A') AS ip_origen,
+            accion,
+            resultado
+        FROM acciones_prevencion
+        ORDER BY timestamp DESC, id DESC
+        LIMIT %s
+    """
+
+    rows = db_fetch_all(query, (limit,))
+
+    if rows is not None:
+        return rows, "PostgreSQL"
+
+    fallback_rows = [
+        {"registro": line}
+        for line in read_log_file("prevencion.log", limit)
+    ]
+
+    return fallback_rows, "Archivo de log"
+
+
 @app.route("/")
 def index():
     return redirect(url_for("dashboard"))
@@ -65,15 +156,17 @@ def login():
 @app.route("/dashboard")
 @login_required
 def dashboard():
-    alarmas = read_log_file("alarmas.log")
-    prevenciones = read_log_file("prevencion.log")
+    alarmas, alarmas_source = get_alarmas()
+    prevenciones, prevenciones_source = get_prevenciones()
     emails = read_log_file("emails.log")
 
     return render_template(
         "dashboard.html",
         alarmas=alarmas,
         prevenciones=prevenciones,
-        emails=emails
+        emails=emails,
+        alarmas_source=alarmas_source,
+        prevenciones_source=prevenciones_source
     )
 
 
